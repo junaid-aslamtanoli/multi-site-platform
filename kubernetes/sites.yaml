@@ -1,0 +1,105 @@
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: lahore-app
+  namespace: multi-site
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: lahore-app
+  template:
+    metadata:
+      labels:
+        app: lahore-app
+    spec:
+      containers:
+        - name: nginx
+          image: nginx:alpine
+          ports:
+            - containerPort: 80
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: islamabad-app
+  namespace: multi-site
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: islamabad-app
+  template:
+    metadata:
+      labels:
+        app: islamabad-app
+    spec:
+      containers:
+        - name: nginx
+          image: nginx:alpine
+          ports:
+            - containerPort: 80
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: karachi-app
+  namespace: multi-site
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: karachi-app
+  template:
+    metadata:
+      labels:
+        app: karachi-app
+    spec:
+      containers:
+        - name: nginx
+          image: nginx:alpine
+          ports:
+            - containerPort: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: lahore-service
+  namespace: multi-site
+spec:
+  type: NodePort
+  selector:
+    app: lahore-app
+  ports:
+    - port: 80
+      targetPort: 80
+      nodePort: 30110
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: islamabad-service
+  namespace: multi-site
+spec:
+  type: NodePort
+  selector:
+    app: islamabad-app
+  ports:
+    - port: 80
+      targetPort: 80
+      nodePort: 31663
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: karachi-service
+  namespace: multi-site
+spec:
+  type: NodePort
+  selector:
+    app: karachi-app
+  ports:
+    - port: 80
+      targetPort: 80
+      nodePort: 30183
